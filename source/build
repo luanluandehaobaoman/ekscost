@@ -1,1 +1,1 @@
-docker build --platform=linux/amd64 -t lldhbm/ekscost:0.9 .
+docker build --platform=linux/amd64 -t lldhbm/ekscost:$1 .

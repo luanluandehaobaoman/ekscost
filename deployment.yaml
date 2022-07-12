@@ -18,9 +18,12 @@ spec:
       serviceAccountName: ekscost-sa
       containers:
       - name: ekscost
-        image: lldhbm/ekscost:0.3
+        image: lldhbm/ekscost:0.9
         ports:
         - containerPort: 80
+        env:
+        - name: AWS_DEFAULT_REGION
+          value: us-east-1
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

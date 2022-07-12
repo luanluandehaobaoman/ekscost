@@ -2,15 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: monitoring
-  annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port:   '3000'
+  namespace: ekscost
 spec:
-  selector:
-    app: grafana
-  type: NodePort
   ports:
     - port: 3000
-      targetPort: 3000
-      nodePort: 32000
+      protocol: TCP
+      targetPort: http-grafana
+  selector:
+    app: grafana
+  sessionAffinity: None

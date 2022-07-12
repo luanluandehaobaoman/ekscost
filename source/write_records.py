@@ -1,7 +1,7 @@
 import time
 import boto3
 from botocore.config import Config
-from source import get_pod_info, get_node_info
+import get_pod_info, get_node_info
 
 session = boto3.Session()
 write_client = session.client('timestream-write',

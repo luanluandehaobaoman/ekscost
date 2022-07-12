@@ -2,7 +2,6 @@ import time
 import boto3
 import write_records
 import ekscost_config
-import threading
 
 session = boto3.Session()
 common_attributes = write_records.prepare_common_attributes(ekscost_config.CLUSTER_NAME)

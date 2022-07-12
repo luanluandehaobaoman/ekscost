@@ -2,8 +2,8 @@ from kubernetes import client, config, dynamic
 import json
 from kubernetes.client import api_client
 
-config.load_kube_config()
-
+config.load_incluster_config()
+# config.load_kube_config()
 
 def get_pod_info():
     v1 = client.CoreV1Api()

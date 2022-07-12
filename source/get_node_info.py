@@ -2,8 +2,8 @@ from kubernetes import client, config
 import get_ec2_price
 import json
 
-config.load_kube_config()
-
+config.load_incluster_config()
+# config.load_kube_config()
 
 def get_node_info():
     v1 = client.CoreV1Api()

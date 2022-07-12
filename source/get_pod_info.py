@@ -61,7 +61,7 @@ def get_pod_info():
 def get_pod_metrics():
     # Creating a dynamic client
     client = dynamic.DynamicClient(
-        api_client.ApiClient(configuration=config.load_kube_config())
+        api_client.ApiClient(configuration=config.load_incluster_config())
     )
 
     # fetching the node api

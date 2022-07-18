@@ -68,9 +68,9 @@ def write_records(records, common_attributes, db_name, table_name):
 
 
 def prepare_pods_records():
-    pods_info = get_pod_info.get_pod_info()
-    records = []
     try:
+        pods_info = get_pod_info.get_pod_info()
+        records = []
         for pod_name in pods_info:
             current_time = int(time.time() * 1000)
             # measure_name = "%s_%s" % (pods_info[pod_name]['pod_namespace'], pod_name)

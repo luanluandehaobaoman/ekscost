@@ -18,12 +18,37 @@ spec:
       serviceAccountName: ekscost-sa
       containers:
       - name: ekscost
-        image: lldhbm/ekscost:0.9
-        ports:
-        - containerPort: 80
-#        env:
-#        - name: AWS_DEFAULT_REGION
-#          value: us-east-1
+        image: lldhbm/ekscost:0.95
+        resources:
+          limits:
+            cpu: "2"
+            memory: 512Mi
+          requests:
+            cpu: "1"
+            memory: 256Mi
+        volumeMounts:
+          - mountPath: /ekscost/config
+            name: ekscost-config
+            readOnly: true
+      volumes:
+        - configMap:
+            name: ekscost-cm
+          name: ekscost-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: ekscost
+  name: ekscost-cm
+data:
+  ekscost_config: |-
+    TIMESTREAM_REGION = "us-east-1"
+    DATABASE_NAME = "ekscost"
+    CLUSTER_NAME = "eks-dev"
+    TABLE_POD = "pod_info"
+    TABLE_NODE = "node_info"
+    INTERVAL_POD = 15
+    INTERVAL_NODE = 30
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

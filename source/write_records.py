@@ -1,12 +1,14 @@
 import time
 import boto3
 from botocore.config import Config
-import get_pod_info, get_node_info
+import get_pod_info
+import get_node_info
+import ekscost_config
 
 session = boto3.Session()
 write_client = session.client('timestream-write',
                               config=Config(read_timeout=20, max_pool_connections=5000,
-                                            retries={'max_attempts': 10}))
+                                            retries={'max_attempts': 10}), region_name=ekscost_config.TIMESTREAM_REGION)
 
 
 def prepare_record(current_time, measure_name):

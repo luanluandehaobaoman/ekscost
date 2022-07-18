@@ -6,3 +6,4 @@ TABLE_POD = "pod_info"
 TABLE_NODE = "node_info"
 INTERVAL_POD = 5
 INTERVAL_NODE = 10
+TIMESTREAM_REGION="us-east-1"

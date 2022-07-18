@@ -1,25 +1,25 @@
 import time
 import boto3
 import write_records
-import config.ekscost_cm.ekscost_config
+from config.ekscost_cm import ekscost_config
 import threading
 
 session = boto3.Session()
-common_attributes = write_records.prepare_common_attributes(config.ekscost_cm.ekscost_config.CLUSTER_NAME)
+common_attributes = write_records.prepare_common_attributes(ekscost_config.CLUSTER_NAME)
 
 
 def write_pod_records():
     pod_records = write_records.prepare_pods_records()
     # print(pod_records)
-    write_records.write_records(pod_records, common_attributes, config.ekscost_cm.ekscost_config.DATABASE_NAME,
-                                config.ekscost_cm.ekscost_config.TABLE_POD)
+    write_records.write_records(pod_records, common_attributes, ekscost_config.DATABASE_NAME,
+                                ekscost_config.TABLE_POD)
 
 
 def write_node_records():
     node_records = write_records.prepare_nodes_records()
     # print(node_records)
-    write_records.write_records(node_records, common_attributes, config.ekscost_cm.ekscost_config.DATABASE_NAME,
-                                config.ekscost_cm.ekscost_config.TABLE_NODE)
+    write_records.write_records(node_records, common_attributes, ekscost_config.DATABASE_NAME,
+                                ekscost_config.TABLE_NODE)
 
 
 class WritePodRecords(threading.Thread):
@@ -29,7 +29,7 @@ class WritePodRecords(threading.Thread):
     def run(self):
         while True:
             write_pod_records()
-            time.sleep(config.ekscost_cm.ekscost_config.INTERVAL_POD)
+            time.sleep(ekscost_config.INTERVAL_POD)
 
 
 class WriteNodeRecords(threading.Thread):
@@ -39,7 +39,7 @@ class WriteNodeRecords(threading.Thread):
     def run(self):
         while True:
             write_node_records()
-            time.sleep(config.ekscost_cm.ekscost_config.INTERVAL_NODE)
+            time.sleep(ekscost_config.INTERVAL_NODE)
 
 
 threads = []

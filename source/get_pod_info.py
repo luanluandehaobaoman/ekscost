@@ -18,8 +18,12 @@ def get_pod_info():
             pod_namespace = pod.metadata.namespace
             # measure_name = "%s_%s" % (pod_nsname, pod_name)
             pod_node_name = pod.spec.node_name
-            cpu_utilization = pods_metrics[pod_name]['cpu_util']
-            memory_utilization = pods_metrics[pod_name]['memory_util']
+            if pod_name in pods_metrics:
+                cpu_utilization = pods_metrics[pod_name]['cpu_util']
+                memory_utilization = pods_metrics[pod_name]['memory_util']
+            else:
+                cpu_utilization = 0
+                memory_utilization = 0
             pod_resource = {
                 "cpu_request": 0,
                 "memory_request": 0,
@@ -63,12 +67,12 @@ def get_pod_info():
 def get_pod_metrics():
     try:
         # Creating a dynamic client
-        client = dynamic.DynamicClient(
+        dynamic_client = dynamic.DynamicClient(
             api_client.ApiClient(configuration=config.load_incluster_config())
         )
 
         # fetching the node api
-        api = client.resources.get(api_version="metrics.k8s.io/v1beta1", kind="PodMetrics")
+        api = dynamic_client.resources.get(api_version="metrics.k8s.io/v1beta1", kind="PodMetrics")
         pod_data = {}
         for item in api.get().items:
             pod_name = item.metadata.name

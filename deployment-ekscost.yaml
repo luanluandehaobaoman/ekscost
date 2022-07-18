@@ -18,7 +18,7 @@ spec:
       serviceAccountName: ekscost-sa
       containers:
       - name: ekscost
-        image: lldhbm/ekscost:0.95
+        image: lldhbm/ekscost:0.98
         resources:
           limits:
             cpu: "2"
@@ -47,8 +47,8 @@ data:
     CLUSTER_NAME = "eks-dev"
     TABLE_POD = "pod_info"
     TABLE_NODE = "node_info"
-    INTERVAL_POD = 15
-    INTERVAL_NODE = 30
+    INTERVAL_POD = 30
+    INTERVAL_NODE = 60
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

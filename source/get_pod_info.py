@@ -3,14 +3,16 @@ import json
 from kubernetes.client import api_client
 
 config.load_incluster_config()
+
+
 # config.load_kube_config()
 
 def get_pod_info():
-    v1 = client.CoreV1Api()
-    pods = v1.list_pod_for_all_namespaces(watch=False)
-    pods_data = {}
-    pods_metrics = get_pod_metrics()
     try:
+        v1 = client.CoreV1Api()
+        pods = v1.list_pod_for_all_namespaces(watch=False)
+        pods_data = {}
+        pods_metrics = get_pod_metrics()
         for pod in pods.items:
             pod_name = pod.metadata.name
             pod_namespace = pod.metadata.namespace
@@ -59,48 +61,50 @@ def get_pod_info():
 
 
 def get_pod_metrics():
-    # Creating a dynamic client
-    client = dynamic.DynamicClient(
-        api_client.ApiClient(configuration=config.load_incluster_config())
-    )
+    try:
+        # Creating a dynamic client
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_incluster_config())
+        )
 
-    # fetching the node api
-    api = client.resources.get(api_version="metrics.k8s.io/v1beta1", kind="PodMetrics")
-    pod_data = {}
-    for item in api.get().items:
-        pod_name = item.metadata.name
-        pod_utilization = {
-            "cpu_util": 0,
-            "memory_util": 0
-        }
-        for i in item.containers:
-            cpu = i.usage.cpu
-            memory = i.usage.memory
-            if cpu:
-                if cpu[-1] == "m":
-                    cpu = eval(cpu[0:-1])
-                elif cpu[-1] == "n":
-                    cpu = eval(cpu[0:-1]) / 1000 / 1000
-                elif cpu[-1] == "u":
-                    cpu = eval(cpu[0:-1]) / 1000
-                else:
-                    cpu = eval(cpu) * 1000
-                pod_utilization["cpu_util"] += cpu
-            if memory:
-                memory_mi = eval(memory[0:-2])
-                if memory[-2:] == "Gi":
-                    memory_mi = memory_mi * 1024
-                elif memory[-2:] == "Mi":
-                    memory_mi = memory_mi
-                elif memory[-2:] == "Ki":
-                    memory_mi = memory_mi / 1024
-                else:
-                    memory_mi = eval(memory) / 1024 / 1024
-                pod_utilization["memory_util"] += memory_mi
-        pod_data[pod_name] = pod_utilization
-    return pod_data
+        # fetching the node api
+        api = client.resources.get(api_version="metrics.k8s.io/v1beta1", kind="PodMetrics")
+        pod_data = {}
+        for item in api.get().items:
+            pod_name = item.metadata.name
+            pod_utilization = {
+                "cpu_util": 0,
+                "memory_util": 0
+            }
+            for i in item.containers:
+                cpu = i.usage.cpu
+                memory = i.usage.memory
+                if cpu:
+                    if cpu[-1] == "m":
+                        cpu = eval(cpu[0:-1])
+                    elif cpu[-1] == "n":
+                        cpu = eval(cpu[0:-1]) / 1000 / 1000
+                    elif cpu[-1] == "u":
+                        cpu = eval(cpu[0:-1]) / 1000
+                    else:
+                        cpu = eval(cpu) * 1000
+                    pod_utilization["cpu_util"] += cpu
+                if memory:
+                    memory_mi = eval(memory[0:-2])
+                    if memory[-2:] == "Gi":
+                        memory_mi = memory_mi * 1024
+                    elif memory[-2:] == "Mi":
+                        memory_mi = memory_mi
+                    elif memory[-2:] == "Ki":
+                        memory_mi = memory_mi / 1024
+                    else:
+                        memory_mi = eval(memory) / 1024 / 1024
+                    pod_utilization["memory_util"] += memory_mi
+            pod_data[pod_name] = pod_utilization
+        return pod_data
+    except Exception as err:
+        print("Error:", err)
 
 
 if __name__ == "__main__":
     print(json.dumps(get_pod_info(), indent=4))
-

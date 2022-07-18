@@ -93,9 +93,9 @@ def prepare_pods_records():
 
 
 def prepare_nodes_records():
-    nodes_info = get_node_info.get_node_info()
-    records = []
     try:
+        nodes_info = get_node_info.get_node_info()
+        records = []
         for node_name in nodes_info:
             current_time = int(time.time() * 1000)
 

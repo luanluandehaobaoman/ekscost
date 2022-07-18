@@ -6,10 +6,10 @@ config.load_incluster_config()
 # config.load_kube_config()
 
 def get_node_info():
-    v1 = client.CoreV1Api()
-    nodes_data = {}
-    nodes = v1.list_node()
     try:
+        v1 = client.CoreV1Api()
+        nodes_data = {}
+        nodes = v1.list_node()
         for node in nodes.items:
             node_name = node.metadata.name
             node_instance_type = node.metadata.labels['beta.kubernetes.io/instance-type']

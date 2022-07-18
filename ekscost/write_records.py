@@ -3,7 +3,7 @@ import boto3
 from botocore.config import Config
 import get_pod_info
 import get_node_info
-from ekscost.config.ekscost_cm import ekscost_config
+from config.ekscost_cm import ekscost_config
 
 session = boto3.Session()
 write_client = session.client('timestream-write',

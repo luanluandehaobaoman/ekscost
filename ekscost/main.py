@@ -1,7 +1,7 @@
 import time
 import boto3
 import write_records
-from ekscost.config.ekscost_cm import ekscost_config
+from config.ekscost_cm import ekscost_config
 import threading
 
 session = boto3.Session()

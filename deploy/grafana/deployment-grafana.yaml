@@ -27,7 +27,7 @@ spec:
       labels:
         app: grafana
     spec:
-      serviceAccountName: ekscost-sa
+      serviceAccountName: grafana-sa
       securityContext:
         fsGroup: 472
         supplementalGroups:

@@ -62,9 +62,8 @@ def write_records(records, common_attributes, db_name, table_name):
                                             CommonAttributes=common_attributes,
                                             Records=records)
         status = result['ResponseMetadata']['HTTPStatusCode']
-        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-        print("Processed %d records. WriteRecords HTTPStatusCode: %s" %
-              (len(records), status))
+        print("%s Processed %d records. WriteRecords HTTPStatusCode: %s" %
+              (time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())), len(records), status))
     except Exception as err:
         print("Error:", err)
 

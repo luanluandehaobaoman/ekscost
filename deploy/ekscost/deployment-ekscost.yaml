@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ekscost-deployment
-  namespace : ekscost
+  namespace: ekscost
   labels:
     app: ekscost
 spec:
@@ -17,56 +17,48 @@ spec:
     spec:
       serviceAccountName: ekscost-sa
       containers:
-      - name: ekscost
-        image: lldhbm/ekscost
-        resources:
-          limits:
-            cpu: "2"
-            memory: 512Mi
-          requests:
-            cpu: "1"
-            memory: 256Mi
-        volumeMounts:
-          - mountPath: /ekscost/config
-            name: ekscost-config
-            readOnly: true
-      volumes:
-        - configMap:
-            name: ekscost-cm
-          name: ekscost-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: ekscost
-  name: ekscost-cm
-data:
-  ekscost_config.py: |-
-    TIMESTREAM_REGION = "us-east-1"
-    DATABASE_NAME = "ekscost"
-    CLUSTER_NAME = "eks-dev"
-    TABLE_POD = "pod_info"
-    TABLE_NODE = "node_info"
-    INTERVAL_POD = 30
-    INTERVAL_NODE = 60
+        - name: ekscost
+          image: lldhbm/ekscost
+          resources:
+            limits:
+              cpu: "2"
+              memory: 512Mi
+            requests:
+              cpu: "1"
+              memory: 256Mi
+          env:
+            - name: TIMESTREAM_REGION
+              value: "us-east-1"
+            - name: CLUSTER_NAME
+              value: "eks-dev"
+            - name: DATABASE_NAME
+              value: "ekscost"
+            - name: TABLE_POD
+              value: "pod_info"
+            - name: TABLE_NODE
+              value: "node_info"
+            - name: INTERVAL_POD
+              value: "30"
+            - name: INTERVAL_NODE
+              value: "15"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: cluster-info-reader
 rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["get", "watch", "list"]
+  - apiGroups: [ "*" ]
+    resources: [ "*" ]
+    verbs: [ "get", "watch", "list" ]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cluster-info-reader
 subjects:
-- kind: ServiceAccount
-  name: ekscost-sa
-  namespace: ekscost
+  - kind: ServiceAccount
+    name: ekscost-sa
+    namespace: ekscost
 roleRef:
   kind: ClusterRole
   name: cluster-info-reader

@@ -3,9 +3,9 @@ env:
   secrets-manager:
     DOCKERHUB_PASS: "/dockerhub/credentials:password"
     DOCKERHUB_USERNAME: "/dockerhub/credentials:username"
-  variables:
-    $IMAGE_REPO_NAME: ekscost_repo
-    $IMAGE_TAG: ekscost_tag
+#  variables:
+#    $IMAGE_REPO_NAME: ekscost_repo
+#    $IMAGE_TAG: ekscost_tag
 phases:
   install:
     commands:

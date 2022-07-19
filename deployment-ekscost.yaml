@@ -18,7 +18,7 @@ spec:
       serviceAccountName: ekscost-sa
       containers:
       - name: ekscost
-        image: lldhbm/ekscost:0.98
+        image: lldhbm/ekscost:0.99
         resources:
           limits:
             cpu: "2"
@@ -41,7 +41,7 @@ metadata:
   namespace: ekscost
   name: ekscost-cm
 data:
-  ekscost_config: |-
+  ekscost_config.py: |-
     TIMESTREAM_REGION = "us-east-1"
     DATABASE_NAME = "ekscost"
     CLUSTER_NAME = "eks-dev"

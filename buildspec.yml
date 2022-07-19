@@ -3,9 +3,9 @@ env:
   secrets-manager:
     DOCKERHUB_PASS: "/dockerhub/credentials:password"
     DOCKERHUB_USERNAME: "/dockerhub/credentials:username"
-  variables:
-    $IMAGE_REPO_NAME: lldhbm/ekscost
-    $IMAGE_TAG: 0.11
+#  variables:
+#    $IMAGE_REPO_NAME: lldhbm/ekscost
+#    $IMAGE_TAG: 0.11
 phases:
   install:
     commands:

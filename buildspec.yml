@@ -11,7 +11,7 @@ phases:
     commands:
       - echo pre_build step...
       - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASS
-      - $(aws ecr get-login --no-include-email --region us-east-1)
+#      - $(aws ecr get-login --no-include-email --region us-east-1)
   pre_build:
     commands:
       - echo Logging in to Docker Hub...

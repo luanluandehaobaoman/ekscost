@@ -1,0 +1,152 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-info-reader
+rules:
+  - apiGroups: [ "*" ]
+    resources: [ "*" ]
+    verbs: [ "get", "watch", "list" ]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cluster-info-reader
+subjects:
+  - kind: ServiceAccount
+    name: ekscost-writerecords-sa
+    namespace: ekscost
+roleRef:
+  kind: ClusterRole
+  name: cluster-info-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ekscost-deployment
+  namespace: ekscost
+  labels:
+    app: ekscost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ekscost
+  template:
+    metadata:
+      labels:
+        app: ekscost
+    spec:
+      serviceAccountName: ekscost-writerecords-sa
+      containers:
+        - name: ekscost
+          image: lldhbm/ekscost
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "2"
+              memory: 512Mi
+            requests:
+              cpu: "1"
+              memory: 256Mi
+          env:
+            - name: TIMESTREAM_REGION
+              value: "$TIMESTREAM_REGION"
+            - name: CLUSTER_NAME
+              value: "$CLUSTER_NAME"
+            - name: DATABASE_NAME
+              value: "$DATABASE_NAME"
+            - name: TABLE_POD
+              value: "$TABLE_POD"
+            - name: TABLE_NODE
+              value: "$TABLE_NODE"
+            - name: INTERVAL_POD
+              value: "30"
+            - name: INTERVAL_NODE
+              value: "60"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+  namespace: ekscost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: ekscost
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      serviceAccountName: ekscost-dashboard-sa
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: grafana
+          image: grafana/grafana
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http-grafana
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /robots.txt
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3000
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 750Mi
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-pv
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: ekscost
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: http-grafana
+  selector:
+    app: grafana
+  sessionAffinity: None

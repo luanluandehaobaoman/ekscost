@@ -15,7 +15,8 @@
             "Action": [
                 "timestream:DescribeEndpoints",
                 "timestream:SelectValues",
-                "timestream:CancelQuery"
+                "timestream:CancelQuery",
+                "timestream:ListDatabases"
             ],
             "Resource": "*"
         }

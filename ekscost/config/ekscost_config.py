@@ -1,13 +1,5 @@
 import os
 
-# TIMESTREAM_REGION = "us-east-1"
-# DATABASE_NAME = "ekscost"
-# CLUSTER_NAME = "eks-dev"
-# TABLE_POD = "pod_info"
-# TABLE_NODE = "node_info"
-# INTERVAL_POD = 15
-# INTERVAL_NODE = 30
-
 TIMESTREAM_REGION = os.getenv("TIMESTREAM_REGION") if os.getenv("TIMESTREAM_REGION") else "us-east-1"
 DATABASE_NAME = os.getenv("DATABASE_NAME") if os.getenv("DATABASE_NAME") else "ekscost"
 CLUSTER_NAME = os.getenv("CLUSTER_NAME") if os.getenv("CLUSTER_NAME") else "eks-dev"

@@ -7,4 +7,3 @@ TABLE_POD = os.getenv("TABLE_POD") if os.getenv("TABLE_POD") else "pod_info"
 TABLE_NODE = os.getenv("TABLE_NODE") if os.getenv("TABLE_NODE") else "node_info"
 INTERVAL_POD = int(os.getenv("INTERVAL_POD")) if os.getenv("INTERVAL_POD") else 15
 INTERVAL_NODE = int(os.getenv("INTERVAL_NODE")) if os.getenv("INTERVAL_NODE") else 30
-

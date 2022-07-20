@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: CloudFormation template which Create timestream Database and tables.
+
+Parameters:
+  EksCostDatabaseName:
+    Description: Please enter the Database Name
+    Type: String
+    Default: EKS_cost
+  TableNamePodInfo:
+    Description: Please enter the TableName of Pod_info
+    Type: String
+    Default: pod_info
+  TableNameNodeInfo:
+    Description: Please enter the TableName of Node_info
+    Type: String
+    Default: node_info
+
+Resources:
+  TimeStreamDatabase:
+    Type: AWS::Timestream::Database
+    Properties:
+      DatabaseName: !Ref EksCostDatabaseName
+
+
+  TimeStreamPodTable:
+    Type: AWS::Timestream::Table
+    Properties:
+      DatabaseName: !Ref TimeStreamDatabase
+      RetentionProperties:
+        MemoryStoreRetentionPeriodInHours: "720"
+        MagneticStoreRetentionPeriodInDays: "180"
+      TableName: !Ref TableNamePodInfo
+
+
+  TimeStreamNodeTable:
+    Type: AWS::Timestream::Table
+    Properties:
+      DatabaseName: !Ref TimeStreamDatabase
+      RetentionProperties:
+        MemoryStoreRetentionPeriodInHours: "720"
+        MagneticStoreRetentionPeriodInDays: "180"
+      TableName: !Ref TableNameNodeInfo
+
+
+Outputs:
+  DatabaseArn:
+    Description: 'Database Arn'
+    Value: !GetAtt TimeStreamDatabase.Arn

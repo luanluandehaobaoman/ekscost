@@ -1,0 +1,22 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "getec2price",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeSpotPriceHistory",
+                "timestream:DescribeEndpoints",
+                "pricing:GetAttributeValues",
+                "pricing:GetProducts"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "writerecords",
+            "Effect": "Allow",
+            "Action": "timestream:WriteRecords",
+            "Resource": "$DATABASE_ARN/table/*"
+        }
+    ]
+}

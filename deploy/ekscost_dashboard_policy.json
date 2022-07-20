@@ -1,0 +1,25 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "timestream:Select",
+                "timestream:DescribeTable",
+                "timestream:ListMeasures"
+            ],
+            "Resource": "$DATABASE_ARN/table/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "timestream:DescribeEndpoints",
+                "timestream:SelectValues",
+                "timestream:CancelQuery"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+

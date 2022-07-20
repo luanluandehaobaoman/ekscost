@@ -10,14 +10,12 @@ common_attributes = write_records.prepare_common_attributes(ekscost_config.CLUST
 
 def write_pod_records():
     pod_records = write_records.prepare_pods_records()
-    # print(pod_records)
     write_records.write_records(pod_records, common_attributes, ekscost_config.DATABASE_NAME,
                                 ekscost_config.TABLE_POD)
 
 
 def write_node_records():
     node_records = write_records.prepare_nodes_records()
-    # print(node_records)
     write_records.write_records(node_records, common_attributes, ekscost_config.DATABASE_NAME,
                                 ekscost_config.TABLE_NODE)
 

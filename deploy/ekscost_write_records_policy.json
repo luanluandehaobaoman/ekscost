@@ -2,7 +2,7 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "getec2price",
+            "Sid": "GetEC2Price",
             "Effect": "Allow",
             "Action": [
                 "ec2:DescribeSpotPriceHistory",
@@ -13,7 +13,7 @@
             "Resource": "*"
         },
         {
-            "Sid": "writerecords",
+            "Sid": "WriteRecords",
             "Effect": "Allow",
             "Action": "timestream:WriteRecords",
             "Resource": "$DATABASE_ARN/table/*"

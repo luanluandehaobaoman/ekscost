@@ -36,8 +36,23 @@ The backend program ekscost deployed in each eks cluster periodically collects c
 ## database schema
 Each cluster has two tables in Timestream:
 - pod
-![img_2.png](Doc/img/schema-pod.png)
+
+Column|Type|Timestream attribute type
+--|--|--
+cluster|varchar|DIMENSION
+measure_name	|varchar	|MEASURE_NAME
+namespace	|varchar	|MULTI
+node_name	|varchar	|MULTI
+pod_request_cpu	|double|	MULTI
+pod_request_memory|	double	|MULTI
+pod_utilization_cpu|	double	|MULTI
+pod_utilization_memory|double	|MULTI
+time	|timestamp|	TIMESTAMP
+
 - node
+
+-----
+![img_2.png](Doc/img/schema-pod.png)
 ![img_1.png](Doc/img/schema-node.png)
 ## pod price calculation model
 

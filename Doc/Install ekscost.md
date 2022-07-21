@@ -3,20 +3,29 @@
 
 To be able to follow along with the next steps, you will need to have the following prerequisites:
 
-- eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
 - EKS cluster must be configured with an EKS IAM OIDC Provider. See [Create an IAM OIDC provider for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html). This is a requirement for [IAM roles for service account](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) which is used to grant the required AWS permissions to the ekscost and grafana deployments.
 - EKS cluster must already be installed with metrics server。See[Installing Kubernetes Metrics Server
 ](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
 - AWS CLI version 2. See [Installing, updating, and uninstalling the AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 - kubectl. See [Installing kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html).
+- eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
+
 ## 创建Timestream Database
 -  下载 cloudformation 模板
 ```bash
 wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
 ```
-- 在部署`timestream`的目标`region`通过`cloudformation`导入前一步骤下载的模板`CteateTimestream.yaml`
+- 在部署`Timestream`的目标`region`,通过`Cloudformation`控制台导入前一步骤下载的模板`CteateTimestream.yaml`
 ![img.png](img.png)
-
+![img_1.png](img_1.png)
+- 指定stack详细信息
+参数名称|参数描述|可选值
+--|--|--
+EksCostDatabaseName|Timestream database name|默认为：`EKS_cost`
+TableNameNodeInfo|存取集群node信息的database table|默认为：`node_info`
+TableNamePodInfo|存取集群pod信息的database table|默认为：`pod_info`
+![img_2.png](img_2.png)
+- 选择`next`、`next`、`Create stack`即可创建成功
 
 ## 创建iam policy
 ```

@@ -166,6 +166,7 @@ envsubst < deployment-ekscost.yaml | kubectl apply -f -
 
 - Configure dashboard options
 ![img_11.png](img_11.png)
+
     Options |Description
     --|--|--
     Name|Dashboard name

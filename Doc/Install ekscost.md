@@ -19,14 +19,13 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 - 指定stack详细信息
-
+![img_2.png](img_2.png)
     参数名称|参数描述|可选值
     --|--|--
     EksCostDatabaseName|Timestream database name|默认为：`EKS_cost`
     TableNameNodeInfo|存取集群node信息的database table|默认为：`node_info`
     TableNamePodInfo|存取集群pod信息的database table|默认为：`pod_info`
 
-![img_2.png](img_2.png)
 
 - 选择`next`、`next`、`Create stack`即可创建成功
 

@@ -2,9 +2,11 @@
 - The EKS cluster cost includes a fixed portion of the control plane ($0.10 per hour) and computing costs for running Kubernetes worker nodes. 
 - However, because the Pod and the billing unit are not in a one-to-one relationship, and the life cycle of the Pod is different from the billing cycle, there are many EC2 instance types, dynamic changes in spot instance prices, and dynamic scaling of worker nodes, which lead to the cost analysis and optimization  of EKS  become very difficult.
 - *EKScost is a solution for EKS cluster cost visualization*. It displays the computing cost of EKS cluster in detail, which can help enterprise IT cost managers to understand cluster resource usage and cost distribution from multiple dimensions, so as to provide suggestions for cluster cost optimization.
-
-
-
+  - Grafana dashboard of ekscost
+  ![img.png](Doc/img/dashboard/img.png)
+  ![img_1.png](Doc/img/dashboard/img_1.png)
+  ![img_2.png](Doc/img/dashboard/img_2.png)
+  ![img_3.png](Doc/img/dashboard/img_3.png)
 ## Function
 - Cloud resource cost display
 Through the combination of usage statistics and real-time inquiry, the accurate estimation of the computing cost of the cluster is realized, and all computing resource costs under the EKS cluster are aggregated and displayed, and the overall cost of the cluster on the current day/week/month can be viewed in real time.
@@ -70,6 +72,8 @@ time	|timestamp	|TIMESTAMP
 ## pod price calculation model
 
 - Pod hourly cost=(Request cpu/node allocatable cpu+Request mem/node allocatable mem)/2*Node unit price
+# Install
+The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
 
 # Timestream SQL query example in Grafana
 - Node cost trends by DAY

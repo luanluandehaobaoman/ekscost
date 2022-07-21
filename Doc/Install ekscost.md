@@ -162,7 +162,7 @@ envsubst < deployment-ekscost.yaml | kubectl apply -f -
 ![img_16.png](img_16.png)
 - Impoort dashboard with ID `16609`
 ![img_9.png](img_9.png)
-![img_14.png](img_14.png)
+![img_17.png](img_17.png)
 - Configure dashboard options
 ![img_15.png](img_15.png)
     Options |Description

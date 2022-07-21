@@ -15,13 +15,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...
-      - echo image is $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:$IMAGE_TAG$CODEBUILD_BUILD_NUMBER
+      - echo Building the Docker img...
+      - echo img is $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:$IMAGE_TAG$CODEBUILD_BUILD_NUMBER
       - docker build -t $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:$IMAGE_TAG$CODEBUILD_BUILD_NUMBER .
       - docker tag $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:$IMAGE_TAG$CODEBUILD_BUILD_NUMBER $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:latest
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker image...
+      - echo Pushing the Docker img...
       - docker push $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:$IMAGE_TAG$CODEBUILD_BUILD_NUMBER
       - docker push $DOCKERHUB_USERNAME/$IMAGE_REPO_NAME:latest

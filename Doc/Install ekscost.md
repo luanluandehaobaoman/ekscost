@@ -16,10 +16,10 @@ To be able to follow along with the next steps, you will need to have the follow
 wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
 ```
 - In the target `region` where `Timestream` is deployed, import the template `CteateTimestream.yaml` downloaded in the previous step through the `Cloudformation` console
-![img.png](img.png)
-![img_1.png](img_1.png)
+![img.png](img/img.png)
+![img_1.png](img/img_1.png)
 - Specify stack details
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
     Parameters|Description|Default value
     --|--|--
     EksCostDatabaseName|Timestream database name|default：`EKS_cost`
@@ -148,18 +148,18 @@ envsubst < deployment-ekscost.yaml | kubectl apply -f -
 - By default, the `LoadBalancer` method is used to publish the Grafana service and obtain the LoadBalancer address:
 `kubectl -n ekscost get svc`
 - Access grafana in browser via `EXTERNAL-IP`
-![img_3.png](img_3.png)
+![img_3.png](img/img_3.png)
   - username: admin
   - password:admin
   
 ## Configure Grafana dashboard
 - Install timestream plugin
-![img_4.png](img_4.png)
-![img_5.png](img_5.png)
+![img_4.png](img/img_4.png)
+![img_5.png](img/img_5.png)
 - Configure Data sources,choose 'Amazon Timestream'
-![img_6.png](img_6.png)
-![img_7.png](img_7.png)
-![img_16.png](img_16.png)
+![img_6.png](img/img_6.png)
+![img_7.png](img/img_7.png)
+![img_16.png](img/img_16.png)
     Options |Description
     --|--
     Name|Datasource name
@@ -167,10 +167,10 @@ envsubst < deployment-ekscost.yaml | kubectl apply -f -
     Default Region |The region where the Timestream is located
     Database |Timestream database name
 - Impoort dashboard with ID `16609`
-![img_9.png](img_9.png)
-![img_17.png](img_17.png)
+![img_9.png](img/img_9.png)
+![img_17.png](img/img_17.png)
 - Configure dashboard options
-![img_15.png](img_15.png)
+![img_15.png](img/img_15.png)
     Options |Description
     --|--
     Name|Dashboard name

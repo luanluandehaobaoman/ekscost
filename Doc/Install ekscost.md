@@ -15,7 +15,7 @@ To be able to follow along with the next steps, you will need to have the follow
 wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
 ```
 - 在部署`timestream`的目标`region`通过`cloudformation`导入前一步骤下载的模板`CteateTimestream.yaml`
-
+![img.png](img.png)
 
 
 ## 创建iam policy

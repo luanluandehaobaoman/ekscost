@@ -159,7 +159,7 @@ envsubst < deployment-ekscost.yaml | kubectl apply -f -
 - Configure Data sources,choose 'Amazon Timestream'
 ![img_6.png](img_6.png)
 ![img_7.png](img_7.png)
-![img_12.png](img_12.png)
+![img_16.png](img_16.png)
 - Impoort dashboard with ID `16609`
 ![img_9.png](img_9.png)
 ![img_14.png](img_14.png)

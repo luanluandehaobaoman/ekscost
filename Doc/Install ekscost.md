@@ -19,6 +19,7 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 - 指定stack详细信息
+
 参数名称|参数描述|可选值
 --|--|--
 EksCostDatabaseName|Timestream database name|默认为：`EKS_cost`

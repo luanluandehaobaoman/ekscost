@@ -77,7 +77,7 @@ time	|timestamp	|TIMESTAMP
 The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
 
 # Timestream SQL query example in Grafana
-- Node cost trends by DAY
+- Pod cost trends by DAY
 ```commandline
 WITH pod_day_cost AS (
 		WITH pod_cost AS (

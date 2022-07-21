@@ -10,15 +10,15 @@ To be able to follow along with the next steps, you will need to have the follow
 - kubectl. See [Installing kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html).
 - eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
 
-## 创建Timestream Database
--  下载 cloudformation 模板
+## Create Timestream Database
+-  Download the cloudformation template
 ```bash
 wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
 ```
-- 在部署`Timestream`的目标`region`,通过`Cloudformation`控制台导入前一步骤下载的模板`CteateTimestream.yaml`
+- In the target `region` where `Timestream` is deployed, import the template `CteateTimestream.yaml` downloaded in the previous step through the `Cloudformation` console
 ![img.png](img.png)
 ![img_1.png](img_1.png)
-- 指定stack详细信息
+- Specify stack details
 ![img_2.png](img_2.png)
     Parameters|Description|Default value
     --|--|--
@@ -27,7 +27,7 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
     TableNamePodInfo|Timestream database table for cluster pod information|default：`pod_info`
 
 
-- 选择`next`、`next`、`Create stack`即可创建成功
+- Click`next`、`next`、`Create stack`to create stack
 ## Setting up Variables
 Set the following environment variables to store commonly used values.
 **Replace <value>  with your own values below.**

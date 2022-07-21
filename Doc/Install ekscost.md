@@ -25,7 +25,9 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
 EksCostDatabaseName|Timestream database name|默认为：`EKS_cost`
 TableNameNodeInfo|存取集群node信息的database table|默认为：`node_info`
 TableNamePodInfo|存取集群pod信息的database table|默认为：`pod_info`
+
 ![img_2.png](img_2.png)
+
 - 选择`next`、`next`、`Create stack`即可创建成功
 
 ## 创建iam policy

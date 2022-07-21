@@ -1,4 +1,10 @@
 # Install ekscost
+> 注意：
+> - 目前Timestream支持在7个region部署：'us-east-1', 'us-east-2', 'us-west-2', 'eu-west-1', 'eu-central-1', 'ap-southeast-2', 'ap-northeast-1'
+> - Grafana for timestream plugin暂不支持'ap-southeast-2'(Sydney), 'ap-northeast-1'(Tokyo),已提交[PR](https://github.com/grafana/timestream-datasource/pull/178)，预计很快会合并
+> - ekscost方案允许EKS集群与Timestream在不同的region
+
+
 ## Prerequisites
 
 To be able to follow along with the next steps, you will need to have the following prerequisites:

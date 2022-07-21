@@ -1,4 +1,4 @@
-# 部署ekscost
+# Install ekscost
 ## Prerequisites
 
 To be able to follow along with the next steps, you will need to have the following prerequisites:
@@ -20,42 +20,157 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
 ![img_1.png](img_1.png)
 - 指定stack详细信息
 ![img_2.png](img_2.png)
-    参数名称|参数描述|可选值
+    Parameters|Description|Default value
     --|--|--
-    EksCostDatabaseName|Timestream database name|默认为：`EKS_cost`
-    TableNameNodeInfo|存取集群node信息的database table|默认为：`node_info`
-    TableNamePodInfo|存取集群pod信息的database table|默认为：`pod_info`
+    EksCostDatabaseName|Timestream database name|default：`EKS_cost`
+    TableNameNodeInfo|Timestream database table for cluster node information|default：`node_info`
+    TableNamePodInfo|Timestream database table for cluster pod information|default：`pod_info`
 
 
 - 选择`next`、`next`、`Create stack`即可创建成功
+## Setting up Variables
+Set the following environment variables to store commonly used values.
+**Replace <value>  with your own values below.**
 
-## 创建iam policy
+```bash
+export ACCOUNT_ID= <value>
+export CLUSTER_NAME= <value>
+export EKS_CLUSTER_REGION= <value>
+export TIMESTREAM_REGION= <value>
+export DATABASE_NAME=EKS_cost
+export TABLE_NODE=node_info
+export TABLE_POD=pod_info
 ```
-# ekscost write records
-wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/ekscost_write_records_policy.json
+Name|Description
+--|--
+ACCOUNT_ID|aws account id
+CLUSTER_NAME|EKS cluster name
+EKS_CLUSTER_REGION|The region where the eks cluster is located
+TIMESTREAM_REGION|The region where the Timestream is located
+DATABASE_NAME|Timestream database name
+TABLE_NODE|Timestream database table for cluster node information
+TABLE_POD|Timestream database table for cluster pod information
+
+## Configure the ekscost IAM Role
+```commandline
+# Create a policy for ekscost that can collect cluster information and write to Timestream
+cat > ekscost_write_records_policy.json <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "getec2price",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeSpotPriceHistory",
+                "timestream:DescribeEndpoints",
+                "pricing:GetAttributeValues",
+                "pricing:GetProducts"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "writerecords",
+            "Effect": "Allow",
+            "Action": "timestream:WriteRecords",
+            "Resource": "arn:aws:timestream:$TIMESTREAM_REGION:$ACCOUNT_ID:database/$DATABASE_NAME/table/*"
+        }
+    ]
+}
+EOF
 
 aws iam create-policy \
---policy-name EKSCostWriteRecordsPolicy \
---policy-document file://ekscost_write_records_policy.json
-
-# grafana dashboard
-wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/ekscost_dashboard_policy.json
+    --policy-name EKSCostWriteRecordsPolicy \
+    --policy-document file://ekscost_write_records_policy.json
+    
+# Create a policy for Grafana that can query Timestream
+cat > ekscost_dashboard_policy.json <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "timestream:Select",
+                "timestream:DescribeTable",
+                "timestream:ListMeasures"
+            ],
+            "Resource": "arn:aws:timestream:$TIMESTREAM_REGION:$ACCOUNT_ID:database/$DATABASE_NAME/table/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "timestream:DescribeEndpoints",
+                "timestream:SelectValues",
+                "timestream:CancelQuery",
+                "timestream:ListDatabases"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 
 aws iam create-policy \
---policy-name EKSCostDashboardPolicy \
---policy-document file://ekscost_dashboard_policy.json
+    --policy-name EKSCostDashboardPolicy \
+    --policy-document file://ekscost_dashboard_policy.json
+
+# Create IAM role and K8S service account for ekscost that can collect cluster information and write to Timestream
+eksctl create iamserviceaccount \
+    --region $EKS_CLUSTER_REGION \
+    --name ekscost-writerecords-sa \
+    --namespace ekscost \
+    --cluster $CLUSTER_NAME\
+    --attach-policy-arn arn:aws:iam::$ACCOUNT_ID:policy/EKSCostWriteRecordsPolicy \
+    --approve \
+    --override-existing-serviceaccounts
+    
+# Create IAM role and K8S service account for Grafana that can query Timestream
+eksctl create iamserviceaccount \
+    --region $EKS_CLUSTER_REGION \
+    --name ekscost-dashboard-sa \
+    --namespace ekscost \
+    --cluster $CLUSTER_NAME \
+    --attach-policy-arn arn:aws:iam::$ACCOUNT_ID:policy/EKSCostDashboardPolicy \
+    --approve \
+    --override-existing-serviceaccounts
 ```
 
-## eksctl生成sa
 
-## 部署应用yaml
-- ekscost
-- grafana
-- 获取grafana访问地址
+## Install ekscost and Grafana in EKS
+```commandline
+# download deployment yaml of ekscost
+wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/deployment-ekscost.yaml  
 
-## dashboard配置
-- 安装timestream插件
-- 导入dashboard
-- https://grafana.com/grafana/dashboards/16609
+# Install with kubectl  
+envsubst < deployment-ekscost.yaml | kubectl apply -f -  
+```
+- 默认使用`LoadBalancer`方式发布Grafana服务，获取LoadBalancer地址：
+`kubectl -n ekscost get svc`
+- 使用浏览器访问`EXTERNAL-IP`
+![img_3.png](img_3.png)
+  - username: admin
+  - password:admin
+  
+## Configure Grafana dashboard
+- Install timestream plugin
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
+- Configure Data sources,choose 'Amazon Timestream'
+![img_6.png](img_6.png)
+![img_7.png](img_7.png)
+![img_8.png](img_8.png)
+- Impoort dashboard with ID `16609`
+![img_9.png](img_9.png)
+![img_10.png](img_10.png)
 
-- 修改环境变量
+- Configure dashboard options
+![img_11.png](img_11.png)
+    Options |Description
+    --|--|--
+    Name|Dashboard name
+    Amazon Timestream|database source of Timestream
+    table_node_info |Timestream database table for cluster node information
+    table_pod_info |Timestream database table for cluster pod information
+
+Everything should now install successfully!

@@ -145,9 +145,9 @@ wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy
 # Install with kubectl  
 envsubst < deployment-ekscost.yaml | kubectl apply -f -  
 ```
-- 默认使用`LoadBalancer`方式发布Grafana服务，获取LoadBalancer地址：
+- By default, the `LoadBalancer` method is used to publish the Grafana service and obtain the LoadBalancer address:
 `kubectl -n ekscost get svc`
-- 使用浏览器访问`EXTERNAL-IP`
+- Access grafana in browser via `EXTERNAL-IP`
 ![img_3.png](img_3.png)
   - username: admin
   - password:admin

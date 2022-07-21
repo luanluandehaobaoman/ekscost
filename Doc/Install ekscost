@@ -1,0 +1,50 @@
+# 部署ekscost
+## Prerequisites
+
+To be able to follow along with the next steps, you will need to have the following prerequisites:
+
+- eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
+- EKS cluster must be configured with an EKS IAM OIDC Provider. See [Create an IAM OIDC provider for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html). This is a requirement for [IAM roles for service account](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) which is used to grant the required AWS permissions to the ekscost and grafana deployments.
+- EKS cluster must already be installed with metrics server。See[Installing Kubernetes Metrics Server
+](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+- AWS CLI version 2. See [Installing, updating, and uninstalling the AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+- kubectl. See [Installing kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html).
+## 创建Timestream Database
+-  下载 cloudformation 模板
+```bash
+wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
+```
+- 在部署`timestream`的目标`region`通过`cloudformation`导入前一步骤下载的模板`CteateTimestream.yaml`
+
+
+
+## 创建iam policy
+```
+# ekscost write records
+wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/ekscost_write_records_policy.json
+
+aws iam create-policy \
+--policy-name EKSCostWriteRecordsPolicy \
+--policy-document file://ekscost_write_records_policy.json
+
+# grafana dashboard
+wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/ekscost_dashboard_policy.json
+
+aws iam create-policy \
+--policy-name EKSCostDashboardPolicy \
+--policy-document file://ekscost_dashboard_policy.json
+```
+
+## eksctl生成sa
+
+## 部署应用yaml
+- ekscost
+- grafana
+- 获取grafana访问地址
+
+## dashboard配置
+- 安装timestream插件
+- 导入dashboard
+- https://grafana.com/grafana/dashboards/16609
+
+- 修改环境变量

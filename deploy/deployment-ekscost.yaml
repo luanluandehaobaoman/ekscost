@@ -43,11 +43,8 @@ spec:
           image: lldhbm/ekscost
           imagePullPolicy: IfNotPresent
           resources:
-            limits:
-              cpu: "2"
-              memory: 512Mi
             requests:
-              cpu: "1"
+              cpu: 300m
               memory: 256Mi
           env:
             - name: TIMESTREAM_REGION

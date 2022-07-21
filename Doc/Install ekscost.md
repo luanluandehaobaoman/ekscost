@@ -1,26 +1,14 @@
 # Install ekscost
-> 注意：
-> - 目前Timestream支持在7个region部署：'us-east-1', 'us-east-2', 'us-west-2', 'eu-west-1', 'eu-central-1', 'ap-southeast-2', 'ap-northeast-1'
-> - Grafana for timestream plugin暂不支持'ap-southeast-2'(Sydney), 'ap-northeast-1'(Tokyo),已提交[PR](https://github.com/grafana/timestream-datasource/pull/178)，预计很快会合并
-> - ekscost方案允许EKS集群与Timestream在不同的region
-
-
-## Prerequisites
-
-To be able to follow along with the next steps, you will need to have the following prerequisites:
-
-- EKS cluster must be configured with an EKS IAM OIDC Provider. See [Create an IAM OIDC provider for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html). This is a requirement for [IAM roles for service account](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) which is used to grant the required AWS permissions to the ekscost and grafana deployments.
-- EKS cluster must already be installed with metrics server。See[Installing Kubernetes Metrics Server
-](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
-- AWS CLI version 2. See [Installing, updating, and uninstalling the AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
-- kubectl. See [Installing kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html).
-- eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
 
 ## Create Timestream Database
--  Download the cloudformation template
-```bash
-wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml
-```
+> Notice：
+>  - ekscost方案允许EKS集群与Timestream在不同的region
+> - 目前Timestream支持在7个region部署：'us-east-1', 'us-east-2', 'us-west-2', 'eu-west-1', 'eu-central-1', 'ap-southeast-2', 'ap-northeast-1'
+> - Grafana for timestream plugin暂不支持'ap-southeast-2'(Sydney), 'ap-northeast-1'(Tokyo),已提交[PR](https://github.com/grafana/timestream-datasource/pull/178)，预计很快会合并
+
+-  Download the [cloudformation template](https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CteateTimestream.yaml)
+
+
 - In the target `region` where `Timestream` is deployed, import the template `CteateTimestream.yaml` downloaded in the previous step through the `Cloudformation` console
 ![img.png](img/img.png)
 ![img_1.png](img/img_1.png)
@@ -34,10 +22,23 @@ wget wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/d
 
 
 - Click`next`、`next`、`Create stack`to create stack
-## Setting up Variables
-Set the following environment variables to store commonly used values.
-**Replace <value>  with your own values below.**
 
+## Install ekscost and Granafa in the target EKS cluster
+### Prerequisites
+
+To be able to follow along with the next steps, you will need to have the following prerequisites:
+- AWS CLI version 2. See [Installing, updating, and uninstalling the AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+- kubectl. See [Installing kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html).
+- eksctl . See [Installing or upgrading eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl).
+- EKS cluster must be configured with an EKS IAM OIDC Provider. See [Create an IAM OIDC provider for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html). This is a requirement for [IAM roles for service account](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) which is used to grant the required AWS permissions to the ekscost and grafana deployments.
+- EKS cluster must already be installed with metrics server。See[Installing Kubernetes Metrics Server
+](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+
+### Setting up Variables
+
+- Before formal installation，Set the following environment variables to store commonly used values.
+- **Replace <value>  with your own values below.**
+- Replace the value of`DATABASE_NAME` `TABLE_NODE` `TABLE_POD` parameters to the actual value.
 ```bash
 export ACCOUNT_ID= <value>
 export CLUSTER_NAME= <value>
@@ -47,7 +48,8 @@ export DATABASE_NAME=EKS_cost
 export TABLE_NODE=node_info
 export TABLE_POD=pod_info
 ```
-Name|Description
+- Parameter Description
+Variables Name|Description
 --|--
 ACCOUNT_ID|aws account id
 CLUSTER_NAME|EKS cluster name
@@ -57,9 +59,13 @@ DATABASE_NAME|Timestream database name
 TABLE_NODE|Timestream database table for cluster node information
 TABLE_POD|Timestream database table for cluster pod information
 
-## Configure the ekscost IAM Role
+### Configure the IAM Role
+ekscost requires permissions like call EC2 price API or write records to Timestream database. This need to create an AWS IAM Role, Kubernetes service account, and associate them using , and associate them using [IRSA](https://docs.aws.amazon.com/emr/latest/EMR-on-EKS-DevelopmentGuide/setting-up-enable-IAM.html).
+
+#### Create IAM policy
+- Create a policy for ekscost that can collect cluster information and write to Timestream
+
 ```commandline
-# Create a policy for ekscost that can collect cluster information and write to Timestream
 cat > ekscost_write_records_policy.json <<EOF
 {
     "Version": "2012-10-17",
@@ -88,8 +94,9 @@ EOF
 aws iam create-policy \
     --policy-name EKSCostWriteRecordsPolicy \
     --policy-document file://ekscost_write_records_policy.json
-    
-# Create a policy for Grafana that can query Timestream
+```   
+- Create a policy for Grafana that can query Timestream
+```commandline
 cat > ekscost_dashboard_policy.json <<EOF
 {
     "Version": "2012-10-17",
@@ -120,8 +127,11 @@ EOF
 aws iam create-policy \
     --policy-name EKSCostDashboardPolicy \
     --policy-document file://ekscost_dashboard_policy.json
+```
+#### Create IAM role,Kubernetes service account
+-  Create IAM role and K8S service account for ekscost that can collect cluster information and write to Timestream
 
-# Create IAM role and K8S service account for ekscost that can collect cluster information and write to Timestream
+```commandline
 eksctl create iamserviceaccount \
     --region $EKS_CLUSTER_REGION \
     --name ekscost-writerecords-sa \
@@ -130,8 +140,9 @@ eksctl create iamserviceaccount \
     --attach-policy-arn arn:aws:iam::$ACCOUNT_ID:policy/EKSCostWriteRecordsPolicy \
     --approve \
     --override-existing-serviceaccounts
-    
-# Create IAM role and K8S service account for Grafana that can query Timestream
+ ```  
+- Create IAM role and K8S service account for Grafana that can query Timestream
+```commandline
 eksctl create iamserviceaccount \
     --region $EKS_CLUSTER_REGION \
     --name ekscost-dashboard-sa \
@@ -143,20 +154,24 @@ eksctl create iamserviceaccount \
 ```
 
 
-## Install ekscost and Grafana in EKS
-```commandline
-# download deployment yaml of ekscost
-wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/deployment-ekscost.yaml  
+### Install ekscost and Grafana in EKS
 
-# Install with kubectl  
+- download deployment yaml of ekscost
+```commandline
+wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/deployment-ekscost.yaml  
+```
+- Install with kubectl 
+```commandline
 envsubst < deployment-ekscost.yaml | kubectl apply -f -  
 ```
-- By default, the `LoadBalancer` method is used to publish the Grafana service and obtain the LoadBalancer address:
-`kubectl -n ekscost get svc`
-- Access grafana in browser via `EXTERNAL-IP`
+- Obtain the LoadBalancer address of Grafana(By default, the `LoadBalancer` method is used to publish the Grafana service).
+```commandline
+kubectl -n ekscost get svc
+```
+- Access grafana in browser via `EXTERNAL-IP`  output in the previous step
 ![img_3.png](img/img_3.png)
-  - username: admin
-  - password:admin
+  - username: `admin`
+  - password: `admin`
   
 ## Configure Grafana dashboard
 - Install timestream plugin

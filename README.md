@@ -20,9 +20,9 @@ According to the cost ratio of splitting the cluster by pod and namespace, it pr
 - Application cost optimization
 View the effective request ratio (actually used resources/requested resources) of pods, including CPU and Memory, to provide cost optimization analysis capabilities in the application dimension.
 # Architecture
-The backend program ekscost deployed in each eks cluster periodically collects cluster resource information and node price information, stores it in the time series database Amazon Timestream, and then displays it centrally through grafana.
+The backend program ekscost deployed in each eks cluster periodically collects EKS cluster resource information and node price information, stores it in the time series database Amazon Timestream, and then displays it centrally through grafana.
 ![architecture.png](Doc/img/architecture.png) 
-## Collected information includes
+## Information collected from the EKS cluster includes:
 - pod
   - pod_request_cpu
   - pod_request_memory
@@ -35,7 +35,7 @@ The backend program ekscost deployed in each eks cluster periodically collects c
   - node_instance_type
   - node_price
 
-## database schema
+## Database schema of Timestream
 Each cluster has two tables in Timestream:
 - pod
 
@@ -69,9 +69,10 @@ time	|timestamp	|TIMESTAMP
 
 
 
-## pod price calculation model
-
-- Pod hourly cost=(Request cpu/node allocatable cpu+Request mem/node allocatable mem)/2*Node unit price
+## Price calculation model
+- Pod
+  - Pod hourly cost=(Request cpu/node allocatable cpu+Request mem/node allocatable mem)/2*Node unit price
+  
 # Install
 The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
 

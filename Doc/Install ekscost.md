@@ -8,7 +8,7 @@
 
 - Download the [cloudformation template](https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CreateTimestream.yaml)
 ```commandline
-wget https://github.com/luanluandehaobaoman/ekscost/blob/master/deploy/CreateTimestream.yaml
+wget https://raw.githubusercontent.com/luanluandehaobaoman/ekscost/master/deploy/CreateTimestream.yaml
 ```
 
 

@@ -44,7 +44,10 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             requests:
-              cpu: 300m
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 200m
               memory: 256Mi
           env:
             - name: TIMESTREAM_REGION
@@ -124,7 +127,10 @@ spec:
           resources:
             requests:
               cpu: 250m
-              memory: 750Mi
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: grafana-pv

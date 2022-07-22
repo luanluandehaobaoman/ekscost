@@ -13,7 +13,12 @@ def get_node_info():
     for node in nodes.items:
         node_name = node.metadata.name
         node_instance_type = node.metadata.labels['beta.kubernetes.io/instance-type']
-        node_capacity_type = node.metadata.labels['eks.amazonaws.com/capacityType']
+        if 'eks.amazonaws.com/capacityType' in node.metadata.labels:
+            node_capacity_type = node.metadata.labels['eks.amazonaws.com/capacityType']
+        elif 'karpenter.sh/capacity-type' in node.metadata.labels:
+            node_capacity_type = node.metadata.labels['karpenter.sh/capacity-type']
+        else:
+            node_capacity_type = 'unknown'
         node_zone = node.metadata.labels['topology.kubernetes.io/zone']
         node_region = node.metadata.labels['topology.kubernetes.io/region']
         node_allocatable_cpu = eval(node.status.allocatable['cpu'][0:-1])

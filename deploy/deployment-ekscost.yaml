@@ -3,8 +3,8 @@ kind: ClusterRole
 metadata:
   name: cluster-info-reader
 rules:
-  - apiGroups: [ "*" ]
-    resources: [ "*" ]
+  - apiGroups: [ "","metrics.k8s.io" ]
+    resources: [ "pods","nodes" ]
     verbs: [ "get", "watch", "list" ]
 ---
 kind: ClusterRoleBinding

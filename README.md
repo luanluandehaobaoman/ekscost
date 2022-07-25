@@ -74,8 +74,8 @@ time	|timestamp	|TIMESTAMP
   - Pod hourly cost=(Request cpu/node allocatable cpu+Request mem/node allocatable mem)/2*Node unit price
   
 # Install
-The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
-中文[部署文档]()
+- The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
+- 中文[部署文档](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3.md)
 
 # Timestream SQL query example in Grafana
 - Pod cost trends by DAY

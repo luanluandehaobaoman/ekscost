@@ -159,4 +159,33 @@ SELECT measure_name, CREATE_TIME_SERIES(binned_timestamp_day, sum_price) AS node
 FROM b
 GROUP BY measure_name
 ```
+- Cluster cost this month
+```commandline
+WITH a AS (
+		WITH node_cost_day AS (
+				WITH node_cost_per_hour AS (
+						SELECT measure_name, avg(node_price) AS avg_price
+							, bin(time, 1h) AS binned_timestamp
+						FROM $__database.$table_node_info
+						WHERE time > ago(31d)
+						GROUP BY measure_name, bin(time, 1h)
+						ORDER BY bin(time, 1h)
+					)
+				SELECT date_trunc('month', binned_timestamp) AS one_month, measure_name
+					, sum(avg_price) AS sum_price
+				FROM node_cost_per_hour
+				GROUP BY date_trunc('month', binned_timestamp), measure_name
+				ORDER BY measure_name
+			)
+		SELECT one_month, measure_name, sum(sum_price) AS node_cost_per_day
+		FROM node_cost_day
+		GROUP BY one_month, measure_name
+		ORDER BY one_month
+	)
+SELECT one_month, sum(node_cost_per_day)
+FROM a
+GROUP BY one_month
+ORDER BY one_month DESC
+LIMIT 1
+```
 For full SQL query please refer to [ekscost dashboard](https://grafana.com/grafana/dashboards/16609)

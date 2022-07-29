@@ -63,7 +63,7 @@ spec:
             - name: INTERVAL_POD
               value: "30"
             - name: INTERVAL_NODE
-              value: "60"
+              value: "120"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

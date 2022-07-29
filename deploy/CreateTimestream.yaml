@@ -28,7 +28,7 @@ Resources:
     Properties:
       DatabaseName: !Ref TimeStreamDatabase
       RetentionProperties:
-        MemoryStoreRetentionPeriodInHours: "720"
+        MemoryStoreRetentionPeriodInHours: "168"
         MagneticStoreRetentionPeriodInDays: "180"
       TableName: !Ref TableNamePodInfo
 
@@ -38,7 +38,7 @@ Resources:
     Properties:
       DatabaseName: !Ref TimeStreamDatabase
       RetentionProperties:
-        MemoryStoreRetentionPeriodInHours: "720"
+        MemoryStoreRetentionPeriodInHours: "168"
         MagneticStoreRetentionPeriodInDays: "180"
       TableName: !Ref TableNameNodeInfo
 

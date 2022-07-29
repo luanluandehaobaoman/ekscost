@@ -44,8 +44,8 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 100m
+              memory: 128Mi
             limits:
               cpu: 200m
               memory: 256Mi
@@ -126,10 +126,10 @@ spec:
             timeoutSeconds: 1
           resources:
             requests:
-              cpu: 250m
-              memory: 512Mi
+              cpu: 128m
+              memory: 256Mi
             limits:
-              cpu: 250m
+              cpu: 256m
               memory: 512Mi
           volumeMounts:
             - mountPath: /var/lib/grafana

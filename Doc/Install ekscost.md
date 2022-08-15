@@ -43,10 +43,10 @@ To be able to follow along with the next steps, you will need to have the follow
 - **Replace <value>  with your own values below.**
 - Replace the value of`DATABASE_NAME` `TABLE_NODE` `TABLE_POD` parameters to the actual value.
 ```bash
-export ACCOUNT_ID= <value>
-export CLUSTER_NAME= <value>
-export EKS_CLUSTER_REGION= <value>
-export TIMESTREAM_REGION= <value>
+export ACCOUNT_ID=<value>
+export CLUSTER_NAME=<value>
+export EKS_CLUSTER_REGION=<value>
+export TIMESTREAM_REGION=<value>
 export DATABASE_NAME=EKS_cost
 export TABLE_NODE=node_info
 export TABLE_POD=pod_info

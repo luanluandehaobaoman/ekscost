@@ -3,6 +3,7 @@ import boto3
 import write_records
 from config import ekscost_config
 import threading
+import traceback
 
 session = boto3.Session()
 common_attributes = write_records.prepare_common_attributes(ekscost_config.CLUSTER_NAME)
@@ -17,16 +18,22 @@ def write_pod_records():
     group_pod_records = list_split(pod_records, 100)
 
     for i in group_pod_records:
-        write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
-                                    ekscost_config.TABLE_POD)
+        try:
+            write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
+                                        ekscost_config.TABLE_POD)
+        except Exception:
+            print(traceback.format_exc())
 
 
 def write_node_records():
     node_records = write_records.prepare_nodes_records()
     group_node_records = list_split(node_records, 100)
     for i in group_node_records:
-        write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
-                                    ekscost_config.TABLE_NODE)
+        try:
+            write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
+                                        ekscost_config.TABLE_NODE)
+        except Exception:
+            print(traceback.format_exc())
 
 
 class WritePodRecords(threading.Thread):

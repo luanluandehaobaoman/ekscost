@@ -25,6 +25,7 @@ def write_pod_records():
             print(traceback.format_exc())
 
 
+
 def write_node_records():
     node_records = write_records.prepare_nodes_records()
     group_node_records = list_split(node_records, 100)

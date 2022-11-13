@@ -14,9 +14,10 @@ def list_split(items, n):
 
 
 def write_pod_records():
-    pod_records = write_records.prepare_pods_records()
-    group_pod_records = list_split(pod_records, 100)
     try:
+        pod_records = write_records.prepare_pods_records()
+        group_pod_records = list_split(pod_records, 100)
+
         for i in group_pod_records:
             write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
                                         ekscost_config.TABLE_POD)
@@ -25,9 +26,10 @@ def write_pod_records():
 
 
 def write_node_records():
-    node_records = write_records.prepare_nodes_records()
-    group_node_records = list_split(node_records, 100)
     try:
+        node_records = write_records.prepare_nodes_records()
+        group_node_records = list_split(node_records, 100)
+
         for i in group_node_records:
             write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
                                         ekscost_config.TABLE_NODE)

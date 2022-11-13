@@ -3,7 +3,7 @@ import json
 from kubernetes.client import api_client
 
 config.load_incluster_config()
-
+# config.load_kube_config()
 
 # list pod information and join metrics
 def get_pod_info():
@@ -66,7 +66,9 @@ def get_pod_metrics():
     dynamic_client = dynamic.DynamicClient(
         api_client.ApiClient(configuration=config.load_incluster_config())
     )
-
+    # dynamic_client = dynamic.DynamicClient(
+    #     api_client.ApiClient(configuration=config.load_kube_config())
+    # )
     # fetching the node api
     api = dynamic_client.resources.get(api_version="metrics.k8s.io/v1beta1", kind="PodMetrics")
     pod_data = {}

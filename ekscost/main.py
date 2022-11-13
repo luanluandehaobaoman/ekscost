@@ -26,10 +26,10 @@ def write_pod_records():
 
 
 def write_node_records():
-    try:
-        node_records = write_records.prepare_nodes_records()
-        group_node_records = list_split(node_records, 100)
 
+    node_records = write_records.prepare_nodes_records()
+    group_node_records = list_split(node_records, 100)
+    try:
         for i in group_node_records:
             write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
                                         ekscost_config.TABLE_NODE)

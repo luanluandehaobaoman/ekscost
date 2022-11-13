@@ -121,11 +121,12 @@ def prepare_nodes_records():
 
 if __name__ == "__main__":
     pod_records = prepare_pods_records()
-    write_client = session.client('timestream-write',
-                                  config=Config(read_timeout=20, max_pool_connections=5000,
-                                                retries={'max_attempts': 10}))
-
-    common = prepare_common_attributes("eks-dev")
-    write_records(pod_records, common, "ekscost", "dev_pod_info")
-    node_records = prepare_nodes_records()
-    write_records(node_records, common, db_name="ekscost", table_name="dev_node_info")
+    print(pod_records)
+    # write_client = session.client('timestream-write',
+    #                               config=Config(read_timeout=20, max_pool_connections=5000,
+    #                                             retries={'max_attempts': 10}))
+    #
+    # common = prepare_common_attributes("eks-dev")
+    # write_records(pod_records, common, "ekscost", "dev_pod_info")
+    # node_records = prepare_nodes_records()
+    # write_records(node_records, common, db_name="ekscost", table_name="dev_node_info")

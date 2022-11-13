@@ -3,7 +3,7 @@ import get_ec2_price
 import json
 
 config.load_incluster_config()
-
+# config.load_kube_config()
 
 # get node information
 def get_node_info():

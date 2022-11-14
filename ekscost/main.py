@@ -14,28 +14,27 @@ def list_split(items, n):
 
 
 def write_pod_records():
-    try:
-        pod_records = write_records.prepare_pods_records()
-        group_pod_records = list_split(pod_records, 100)
+    pod_records = write_records.prepare_pods_records()
+    group_pod_records = list_split(pod_records, 100)
 
-        for i in group_pod_records:
+    for i in group_pod_records:
+        try:
             write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
                                         ekscost_config.TABLE_POD)
-    except Exception:
-        print(traceback.format_exc())
+        except Exception:
+            print(traceback.format_exc())
+
 
 
 def write_node_records():
-
     node_records = write_records.prepare_nodes_records()
     group_node_records = list_split(node_records, 100)
-    try:
-        for i in group_node_records:
+    for i in group_node_records:
+        try:
             write_records.write_records(i, common_attributes, ekscost_config.DATABASE_NAME,
                                         ekscost_config.TABLE_NODE)
+        except Exception:
             print(traceback.format_exc())
-    except Exception:
-        print(traceback.format_exc())
 
 
 class WritePodRecords(threading.Thread):

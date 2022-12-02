@@ -7,6 +7,11 @@
   ![img_1.png](Doc/img/dashboard/img_1.png)
   ![img_2.png](Doc/img/dashboard/img_2.png)
   ![img_3.png](Doc/img/dashboard/img_3.png)
+
+# Install
+[EN](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost)
+[中文](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3.md)
+
 ## Function
 - Cloud resource cost display
 Through the combination of usage statistics and real-time inquiry, the accurate estimation of the computing cost of the cluster is realized, and all computing resource costs under the EKS cluster are aggregated and displayed, and the overall cost of the cluster on the current day/week/month can be viewed in real time.
@@ -73,9 +78,6 @@ time	|timestamp	|TIMESTAMP
 - Pod
   - Pod hourly cost=(Request cpu/node allocatable cpu+Request mem/node allocatable mem)/2*Node unit price
   
-# Install
-- The [documentation](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/Install%20ekscost.md#install-ekscost) provides a guide to install ekscost.
-- 中文 [部署文档](https://github.com/luanluandehaobaoman/ekscost/blob/master/Doc/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3.md)
 
 # Timestream SQL query example in Grafana
 - Pod cost trends by DAY

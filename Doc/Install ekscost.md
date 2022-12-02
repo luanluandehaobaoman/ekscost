@@ -36,7 +36,8 @@ To be able to follow along with the next steps, you will need to have the follow
 - EKS cluster must be configured with an EKS IAM OIDC Provider. See [Create an IAM OIDC provider for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html). This is a requirement for [IAM roles for service account](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) which is used to grant the required AWS permissions to the ekscost and grafana deployments.
 - EKS cluster must already be installed with metrics server。See[Installing Kubernetes Metrics Server
 ](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
-
+- EKS cluster must already be installed with Amazon EBS CSI，See[Managing the Amazon EBS CSI driver as an Amazon EKS add-on
+](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/managing-ebs-csi.html)
 ### Setting up Variables
 
 - Before formal installation，Set the following environment variables to store commonly used values.
